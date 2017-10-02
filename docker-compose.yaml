@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  frontend.local:
+    image: traefik:1.4
+    command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
+    ports:
+      - "4443:4443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.conf:/traefik.toml:ro
+      - ./certs/backend.cert:/backend.cert:ro
+      - ./certs/frontend.key:/frontend.key:ro
+      - ./certs/frontend.cert:/frontend.cert:ro
+
+  hello-world-grpc:
+    image: aguilbau/hello-world-grpc:ssl
+    volumes:
+      - ./certs/backend.cert:/backend.cert:ro
+      - ./certs/backend.key:/backend.key:ro
+    labels:
+      - "traefik.backend=hello-world-grpc"
+      - "traefik.frontend.rule=Host:hello-world-grpc"
+
+  hello-world-grpc-client:
+    image: aguilbau/hello-world-grpc:ssl
+    volumes:
+      - ./certs/frontend.cert:/frontend.cert:ro
+    command: tail -f /dev/null
+    environment:
+      - ADDRESS=frontend.local:4443
