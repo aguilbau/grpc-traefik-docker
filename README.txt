@@ -1,5 +1,8 @@
 The goal of this repo is to make a working demo of traefik reverse proxy for GRPC, in docker mode.
 
+STATUS : for now, the problem is that traefik connects to the backend using the ip address. Since the ip can change any time, in many sceanrios,
+       	 there is no way currently for traefik to validate the authenticity of the backend's certificate.
+         I don't think docker + grpc + traefik is possible for now
 
 structure :
 
@@ -44,5 +47,4 @@ To test:
 
 For now, the result of the test is :
 
- 2017/10/02 11:46:40 rpc error: code = FailedPrecondition desc = transport: received the unexpected content-type "text/plain; charset=utf-8"
-
+time="2017-10-02T13:38:59Z" level=warning msg="Error forwarding to https://172.21.0.4:50051, err: x509: cannot validate certificate for 172.21.0.4 because it doesn't contain any IP SANs"

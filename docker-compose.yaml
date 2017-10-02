@@ -13,16 +13,17 @@ services:
       - ./traefik/traefik.conf:/traefik.toml:ro
       - ./certs/backend.cert:/backend.cert:ro
       - ./certs/frontend.key:/frontend.key:ro
-      - ./certs/frontend.cert:/frontend.cert:ro
+      - ./certs/frontend.cert:/frontend.cert:ro      
 
-  hello-world-grpc:
+  backend.local:
     image: aguilbau/hello-world-grpc:ssl
     volumes:
       - ./certs/backend.cert:/backend.cert:ro
       - ./certs/backend.key:/backend.key:ro
     labels:
-      - "traefik.backend=hello-world-grpc"
+      - "traefik.backend=backend.local"
       - "traefik.frontend.rule=Host:hello-world-grpc"
+      - "traefik.protocol=https"
 
   hello-world-grpc-client:
     image: aguilbau/hello-world-grpc:ssl
