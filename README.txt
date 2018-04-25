@@ -2,7 +2,8 @@ The goal of this repo is to make a working demo of traefik reverse proxy for GRP
 
 STATUS : for now, the problem is that traefik connects to the backend using the ip address. Since the ip can change any time, in many sceanrios,
        	 there is no way currently for traefik to validate the authenticity of the backend's certificate.
-         I don't think docker + grpc + traefik is possible for now
+         Therefore, one solution is to generate the certificate matching the ip address at the container's startup, altough you should
+         be aware of the security implications when implementing it. 
 
 structure :
 
